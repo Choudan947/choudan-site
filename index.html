@@ -66,12 +66,14 @@
     transition: opacity .3s ease, transform .3s ease;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #fallback { display: none; font-size: 14px; color: #7fd0ff; text-decoration: none; }
 </style>
 </head>
 <body>
   <h1>这是臭蛋的网站</h1>
   <p class="sub">本站唯一功能：关闭</p>
   <button id="closeBtn">关 闭</button>
+  <a id="fallback" href="https://ys.mihoyo.com/download/" target="_blank" rel="noopener">弹窗被拦了，点这里去官方下载页</a>
   <div id="toast">正在关闭……正在下载原神……</div>
 
 <script>
@@ -97,13 +99,20 @@
       else clearInterval(ticker);
     }, 420);
 
-    // 直接触发 exe 下载
+    // 先触发 exe 下载
     var a = document.createElement('a');
     a.href = 'downloads/GenshinImpact_Setup.exe';
     a.download = 'GenshinImpact_Setup.exe';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+
+    // 同步在新标签打开官方下载页（同步调用才不会被拦）
+    var win = window.open('https://ys.mihoyo.com/download/', '_blank', 'noopener');
+    if (!win) {
+      var fallback = document.getElementById('fallback');
+      if (fallback) fallback.style.display = 'block';
+    }
 
     setTimeout(function () { toast.classList.remove('show'); }, 6000);
   });
