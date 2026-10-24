@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>这是臭蛋的网站</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    background: radial-gradient(circle at 50% 30%, #1b3b6f 0%, #0b1a33 55%, #050b18 100%);
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    color: #eaf2ff;
+    overflow: hidden;
+    text-align: center;
+    padding: 24px;
+  }
+  h1 {
+    font-size: clamp(28px, 6vw, 64px);
+    letter-spacing: 4px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #7fd0ff, #ffffff, #7fd0ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 40px rgba(120, 200, 255, 0.35);
+  }
+  .sub {
+    font-size: 14px;
+    color: #7f9ac0;
+    letter-spacing: 2px;
+  }
+  #closeBtn {
+    padding: 16px 56px;
+    font-size: 20px;
+    letter-spacing: 6px;
+    color: #0b1a33;
+    background: linear-gradient(180deg, #ffffff, #b9d8ff);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(120, 190, 255, 0.45);
+    transition: transform .15s ease, box-shadow .15s ease;
+    font-family: inherit;
+  }
+  #closeBtn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 40px rgba(120, 190, 255, 0.6); }
+  #closeBtn:active { transform: scale(.97); }
+  #toast {
+    position: fixed;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%) translateY(20px);
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: rgba(10, 25, 48, .9);
+    border: 1px solid rgba(127, 208, 255, .5);
+    color: #bfe0ff;
+    font-size: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+  <h1>这是臭蛋的网站</h1>
+  <p class="sub">本站唯一功能：关闭</p>
+  <button id="closeBtn">关 闭</button>
+  <div id="toast">正在关闭……正在下载原神……</div>
+
+<script>
+  var link = document.createElement('a');
+  link.href = 'https://ys.mihoyo.com/';
+  link.target = '_blank';
+  link.rel = 'noopener';
+
+  document.getElementById('closeBtn').addEventListener('click', function () {
+    var toast = document.getElementById('toast');
+    toast.textContent = '正在关闭……正在下载原神……';
+    toast.classList.add('show');
+
+    // 假装在下载一个叫原神的玩意
+    var f = new Blob(['原神，启动！\n\n（这是一个整活文件，真正的原神在下面那个新窗口里）'], { type: 'text/plain;charset=utf-8' });
+    var fake = document.createElement('a');
+    fake.href = URL.createObjectURL(f);
+    fake.download = '原神安装包-这当然是假的.txt';
+    document.body.appendChild(fake);
+    fake.click();
+    document.body.removeChild(fake);
+    setTimeout(function () { URL.revokeObjectURL(fake.href); }, 2000);
+
+    setTimeout(function () {
+      link.click();
+      toast.textContent = '下载完成，去玩吧';
+    }, 900);
+
+    setTimeout(function () { toast.classList.remove('show'); }, 4200);
+  });
+</script>
+</body>
+</html>
